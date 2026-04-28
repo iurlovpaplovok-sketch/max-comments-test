@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Комментарии</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 16px;
+        }
+        .post-preview {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .post-preview h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .post-preview p {
+            font-size: 16px;
+            color: #222;
+        }
+        .comments-list {
+            margin-bottom: 20px;
+        }
+        .comment {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .comment-author {
+            font-weight: 600;
+            font-size: 14px;
+            color: #007aff;
+            margin-bottom: 4px;
+        }
+        .comment-text {
+            font-size: 15px;
+            color: #333;
+        }
+        .comment-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 6px;
+        }
+        .comment-form {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        button {
+            background: #007aff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 12px;
+            width: 100%;
+            cursor: pointer;
+        }
+        button:active { background: #0056b3; }
+        .empty {
+            text-align: center;
+            color: #999;
+            padding: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="post-preview" id="postPreview">
+        <h3>📌 Пост</h3>
+        <p id="postText">Загрузка...</p>
+    </div>
+
+    <div class="comments-list" id="commentsList">
+        <div class="empty">💬 Комментариев пока нет</div>
+    </div>
+
+    <div class="comment-form">
+        <textarea id="commentInput" rows="3" placeholder="Напишите комментарий..."></textarea>
+        <button id="sendBtn">✉️ Отправить комментарий</button>
+    </div>
+
+    <script>
+        let currentPostId = null;
+        let currentChannelId = null;
+
+        // Получаем данные из URL
+        const urlParams = new URLSearchParams(window.location.search);
+        currentPostId = urlParams.get('post_id');
+        const encodedData = urlParams.get('data');
+
+        // Если данные переданы через data параметр
+        if (encodedData && !currentPostId) {
+            try {
+                const data = JSON.parse(decodeURIComponent(encodedData));
+                currentPostId = data.post_id;
+                currentChannelId = data.channel_id;
+                document.getElementById('postText').innerText = data.post_text || 'Пост без текста';
+            } catch(e) {
+                document.getElementById('postText').innerText = 'Не удалось загрузить пост';
+            }
+        }
+
+        // Функция отправки комментария через бота
+        async function sendComment() {
+            const text = document.getElementById('commentInput').value.trim();
+            if (!text) return;
+
+            // Отправляем сообщение боту в ЛС
+            const message = `/comment ${currentPostId}|${currentChannelId}|${text}`;
+            
+            // Используем MAX WebApp API для отправки сообщения боту
+            if (window.TelegramWebApp) {
+                window.TelegramWebApp.sendData(message);
+                window.TelegramWebApp.close();
+            } else {
+                // fallback: показываем инструкцию
+                alert('Отправьте это сообщение боту:\n\n' + message);
+            }
+        }
+
+        document.getElementById('sendBtn').onclick = sendComment;
+        
+        // Поддержка Enter
+        document.getElementById('commentInput').addEventListener('keypress', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') sendComment();
+        });
+    </script>
+</body>
+</html>
