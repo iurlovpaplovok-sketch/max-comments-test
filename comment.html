@@ -167,14 +167,12 @@
                 comment: text
             };
             
-            // Отправляем данные через Telegram WebApp API
+            // Отправляем данные через MAX WebApp API
             if (window.TelegramWebApp) {
-                // Работаем внутри MAX
                 window.TelegramWebApp.sendData(JSON.stringify(commentData));
                 showStatus('✅ Комментарий отправляется...', 'success');
                 setTimeout(() => window.TelegramWebApp.close(), 1000);
             } else {
-                // Для тестирования в браузере
                 showStatus('⚠️ Работает только внутри MAX. Данные: ' + JSON.stringify(commentData), 'error');
                 console.log('Mock send:', commentData);
             }
