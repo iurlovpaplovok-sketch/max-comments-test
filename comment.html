@@ -3,113 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Комментарии</title>
+    <title>GUDDA Комментарии</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #f5f5f5;
+            background: #1a1a1a;  /* тёмный фон */
             padding: 16px;
             padding-bottom: 32px;
         }
+        /* Шапка с логотипом */
+        .header {
+            background: #8B0000;  /* тёмно-красный */
+            margin: -16px -16px 16px -16px;
+            padding: 20px 16px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .header h1 {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .header p {
+            color: #ffcccc;
+            font-size: 12px;
+            margin-top: 4px;
+        }
         .post-preview {
-            background: white;
-            border-radius: 12px;
+            background: #2a2a2a;
+            border-radius: 16px;
             padding: 16px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            border-left: 4px solid #8B0000;
         }
         .post-preview h3 {
             font-size: 14px;
-            color: #666;
+            color: #ff9999;
             margin-bottom: 8px;
         }
         .post-preview p {
             font-size: 16px;
-            color: #222;
+            color: #eee;
             word-wrap: break-word;
         }
         .comments-list {
             margin-bottom: 20px;
         }
         .comment {
-            background: white;
+            background: #2a2a2a;
             border-radius: 12px;
             padding: 12px 16px;
             margin-bottom: 12px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            border-right: 3px solid #8B0000;
         }
         .comment-author {
             font-weight: 600;
             font-size: 14px;
-            color: #007aff;
+            color: #ff6666;
             margin-bottom: 4px;
         }
         .comment-text {
             font-size: 15px;
-            color: #333;
+            color: #ddd;
             word-wrap: break-word;
         }
         .comment-time {
             font-size: 11px;
-            color: #999;
+            color: #777;
             margin-top: 6px;
         }
         .comment-form {
-            background: white;
-            border-radius: 12px;
+            background: #2a2a2a;
+            border-radius: 16px;
             padding: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         textarea {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            border: 1px solid #8B0000;
+            border-radius: 12px;
             font-size: 15px;
             resize: vertical;
             font-family: inherit;
             box-sizing: border-box;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #ff3333;
         }
         button {
-            background: #007aff;
+            background: #8B0000;
             color: white;
             border: none;
             padding: 12px 20px;
-            border-radius: 8px;
+            border-radius: 30px;
             font-size: 16px;
             font-weight: 600;
             margin-top: 12px;
             width: 100%;
             cursor: pointer;
+            transition: background 0.2s;
         }
-        button:active { background: #0056b3; }
+        button:active {
+            background: #5a0000;
+        }
         .empty {
             text-align: center;
-            color: #999;
+            color: #888;
             padding: 32px;
+            background: #2a2a2a;
+            border-radius: 16px;
         }
         .status {
             margin-top: 12px;
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 14px;
             text-align: center;
         }
         .status.success {
-            background: #d4edda;
-            color: #155724;
+            background: #1e4620;
+            color: #8bc34a;
         }
         .status.error {
-            background: #f8d7da;
-            color: #721c24;
+            background: #5a1e1e;
+            color: #ff9999;
         }
         .hidden { display: none; }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 11px;
+            color: #555;
+        }
+        .footer a {
+            color: #8B0000;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>GUDDA</h1>
+        <p>Комментарии к посту</p>
+    </div>
+
     <div class="post-preview">
-        <h3>📌 Пост</h3>
+        <h3>📌 Оригинальный пост</h3>
         <p id="postText">Загрузка...</p>
     </div>
 
@@ -118,9 +167,12 @@
     </div>
 
     <div class="comment-form">
-        <textarea id="commentInput" rows="3" placeholder="Напишите комментарий..."></textarea>
-        <button id="sendBtn">✉️ Отправить комментарий</button>
+        <textarea id="commentInput" rows="3" placeholder="Напишите ваш комментарий..."></textarea>
+        <button id="sendBtn" style="background:#8B0000;">✉️ Отправить</button>
         <div id="status" class="hidden"></div>
+    </div>
+    <div class="footer">
+        <a href="#" onclick="window.TelegramWebApp?.close()">Закрыть</a> • <a href="#">GUDDA</a>
     </div>
 
     <script>
@@ -160,18 +212,16 @@
                 return;
             }
             
-            // Формируем данные для отправки
             const commentData = {
                 post_id: currentPostId,
                 channel_id: currentChannelId,
                 comment: text
             };
             
-            // Отправляем данные через MAX WebApp API
             if (window.TelegramWebApp) {
                 window.TelegramWebApp.sendData(JSON.stringify(commentData));
                 showStatus('✅ Комментарий отправляется...', 'success');
-                setTimeout(() => window.TelegramWebApp.close(), 1000);
+                setTimeout(() => window.TelegramWebApp.close(), 1200);
             } else {
                 showStatus('⚠️ Работает только внутри MAX. Данные: ' + JSON.stringify(commentData), 'error');
                 console.log('Mock send:', commentData);
@@ -188,8 +238,6 @@
         }
 
         document.getElementById('sendBtn').onclick = sendComment;
-        
-        // Отправка по Ctrl+Enter
         document.getElementById('commentInput').addEventListener('keypress', (e) => {
             if (e.ctrlKey && e.key === 'Enter') sendComment();
         });
